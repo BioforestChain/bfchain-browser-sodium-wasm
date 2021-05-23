@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body></body>
+  <script type="module">
+    import { install, crypto_hash_sha256 } from "../build/esm/index.js";
+    import wasmurl from "url:../build/wasm/sodium.wasm";
+    console.log(wasmurl);
+    async function test() {
+      await install({ wasmUrl: wasmurl });
+      const signData = crypto.getRandomValues(new Uint8Array(200));
+      console.log(crypto_hash_sha256(signData));
+      console.log(new Uint8Array(await crypto.subtle.digest("SHA-256", signData)));
+
+      const TIMES = 1e5;
+      {
+        const s = performance.now();
+        for (let i = 0; i < TIMES; i++) {
+          crypto_hash_sha256(signData);
+        }
+        console.log(performance.now() - s);
+      }
+      {
+        const s = performance.now();
+        const taskList = [];
+        for (let i = 0; i < TIMES; i++) {
+          taskList[taskList.length] = crypto.subtle.digest("SHA-256", signData).then((ab) => new Uint8Array(ab));
+        }
+        await Promise.all(taskList);
+        console.log(performance.now() - s);
+      }
+      {
+        const s = performance.now();
+        for (let i = 0; i < TIMES; i++) {
+          new Uint8Array(await crypto.subtle.digest("SHA-256", signData));
+        }
+        console.log(performance.now() - s);
+      }
+    }
+    test();
+  </script>
+</html>

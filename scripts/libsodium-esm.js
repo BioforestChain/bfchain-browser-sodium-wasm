@@ -85,7 +85,7 @@ export default libsodiumModule`;
             return await Module["instantiateWasm"](info, receiveInstance);
           }
           const result = await WebAssembly.instantiateStreaming(
-            fetch("sodium.wasm", {
+            fetch(Module.wasmUrl||"sodium.wasm", {
               credentials: "same-origin",
             }),
             info

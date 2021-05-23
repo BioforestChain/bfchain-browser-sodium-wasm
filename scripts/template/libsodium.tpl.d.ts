@@ -49,6 +49,7 @@ export interface LibsodiumModule extends WasmModule {
   _sodium_init(): number;
   /**custom inject functions */
   instantiateWasm?: InstantiateWasm;
+  wasmUrl?: string;
   getRandomValue: () => number;
 
   HEAPU8: Uint8Array;

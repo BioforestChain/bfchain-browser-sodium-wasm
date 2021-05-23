@@ -284,7 +284,7 @@ const libsodiumModule = function (Module = {}) {
         return await Module["instantiateWasm"](info, receiveInstance);
       }
       const result = await WebAssembly.instantiateStreaming(
-        fetch("sodium.wasm", {
+        fetch(Module.wasmUrl || "sodium.wasm", {
           credentials: "same-origin",
         }),
         info,
@@ -306,10 +306,10 @@ const libsodiumModule = function (Module = {}) {
   var tempI64;
 
   var ASM_CONSTS = {
-    35180: function () {
+    35532: function () {
       return Module.getRandomValue();
     },
-    35216: function () {
+    35568: function () {
       if (Module.getRandomValue === undefined) {
         Module.getRandomValue = () => {
           var buf = new Uint32Array(1);
@@ -453,125 +453,154 @@ const libsodiumModule = function (Module = {}) {
     return (_crypto_box_open_easy = Module["_crypto_box_open_easy"] = Module["asm"]["n"]).apply(null, arguments);
   });
 
+  var _crypto_hash_sha256_bytes = (Module["_crypto_hash_sha256_bytes"] = function () {
+    return (_crypto_hash_sha256_bytes = Module["_crypto_hash_sha256_bytes"] = Module["asm"]["o"]).apply(
+      null,
+      arguments,
+    );
+  });
+
+  var _crypto_hash_sha256_init = (Module["_crypto_hash_sha256_init"] = function () {
+    return (_crypto_hash_sha256_init = Module["_crypto_hash_sha256_init"] = Module["asm"]["p"]).apply(null, arguments);
+  });
+
+  var _crypto_hash_sha256_update = (Module["_crypto_hash_sha256_update"] = function () {
+    return (_crypto_hash_sha256_update = Module["_crypto_hash_sha256_update"] = Module["asm"]["q"]).apply(
+      null,
+      arguments,
+    );
+  });
+
+  var _crypto_hash_sha256_final = (Module["_crypto_hash_sha256_final"] = function () {
+    return (_crypto_hash_sha256_final = Module["_crypto_hash_sha256_final"] = Module["asm"]["r"]).apply(
+      null,
+      arguments,
+    );
+  });
+
+  var _crypto_hash_sha256 = (Module["_crypto_hash_sha256"] = function () {
+    return (_crypto_hash_sha256 = Module["_crypto_hash_sha256"] = Module["asm"]["s"]).apply(null, arguments);
+  });
+
   var _crypto_scalarmult_scalarbytes = (Module["_crypto_scalarmult_scalarbytes"] = function () {
-    return (_crypto_scalarmult_scalarbytes = Module["_crypto_scalarmult_scalarbytes"] = Module["asm"]["o"]).apply(
+    return (_crypto_scalarmult_scalarbytes = Module["_crypto_scalarmult_scalarbytes"] = Module["asm"]["t"]).apply(
       null,
       arguments,
     );
   });
 
   var _crypto_secretbox_keybytes = (Module["_crypto_secretbox_keybytes"] = function () {
-    return (_crypto_secretbox_keybytes = Module["_crypto_secretbox_keybytes"] = Module["asm"]["p"]).apply(
+    return (_crypto_secretbox_keybytes = Module["_crypto_secretbox_keybytes"] = Module["asm"]["u"]).apply(
       null,
       arguments,
     );
   });
 
   var _crypto_secretbox_noncebytes = (Module["_crypto_secretbox_noncebytes"] = function () {
-    return (_crypto_secretbox_noncebytes = Module["_crypto_secretbox_noncebytes"] = Module["asm"]["q"]).apply(
+    return (_crypto_secretbox_noncebytes = Module["_crypto_secretbox_noncebytes"] = Module["asm"]["v"]).apply(
       null,
       arguments,
     );
   });
 
   var _crypto_secretbox_macbytes = (Module["_crypto_secretbox_macbytes"] = function () {
-    return (_crypto_secretbox_macbytes = Module["_crypto_secretbox_macbytes"] = Module["asm"]["r"]).apply(
+    return (_crypto_secretbox_macbytes = Module["_crypto_secretbox_macbytes"] = Module["asm"]["w"]).apply(
       null,
       arguments,
     );
   });
 
   var _crypto_secretbox_easy = (Module["_crypto_secretbox_easy"] = function () {
-    return (_crypto_secretbox_easy = Module["_crypto_secretbox_easy"] = Module["asm"]["s"]).apply(null, arguments);
+    return (_crypto_secretbox_easy = Module["_crypto_secretbox_easy"] = Module["asm"]["x"]).apply(null, arguments);
   });
 
   var _crypto_secretbox_open_easy = (Module["_crypto_secretbox_open_easy"] = function () {
-    return (_crypto_secretbox_open_easy = Module["_crypto_secretbox_open_easy"] = Module["asm"]["t"]).apply(
+    return (_crypto_secretbox_open_easy = Module["_crypto_secretbox_open_easy"] = Module["asm"]["y"]).apply(
       null,
       arguments,
     );
   });
 
   var _crypto_sign_statebytes = (Module["_crypto_sign_statebytes"] = function () {
-    return (_crypto_sign_statebytes = Module["_crypto_sign_statebytes"] = Module["asm"]["u"]).apply(null, arguments);
+    return (_crypto_sign_statebytes = Module["_crypto_sign_statebytes"] = Module["asm"]["z"]).apply(null, arguments);
   });
 
   var _crypto_sign_bytes = (Module["_crypto_sign_bytes"] = function () {
-    return (_crypto_sign_bytes = Module["_crypto_sign_bytes"] = Module["asm"]["v"]).apply(null, arguments);
+    return (_crypto_sign_bytes = Module["_crypto_sign_bytes"] = Module["asm"]["A"]).apply(null, arguments);
   });
 
   var _crypto_sign_seedbytes = (Module["_crypto_sign_seedbytes"] = function () {
-    return (_crypto_sign_seedbytes = Module["_crypto_sign_seedbytes"] = Module["asm"]["w"]).apply(null, arguments);
+    return (_crypto_sign_seedbytes = Module["_crypto_sign_seedbytes"] = Module["asm"]["B"]).apply(null, arguments);
   });
 
   var _crypto_sign_publickeybytes = (Module["_crypto_sign_publickeybytes"] = function () {
-    return (_crypto_sign_publickeybytes = Module["_crypto_sign_publickeybytes"] = Module["asm"]["x"]).apply(
+    return (_crypto_sign_publickeybytes = Module["_crypto_sign_publickeybytes"] = Module["asm"]["C"]).apply(
       null,
       arguments,
     );
   });
 
   var _crypto_sign_secretkeybytes = (Module["_crypto_sign_secretkeybytes"] = function () {
-    return (_crypto_sign_secretkeybytes = Module["_crypto_sign_secretkeybytes"] = Module["asm"]["y"]).apply(
+    return (_crypto_sign_secretkeybytes = Module["_crypto_sign_secretkeybytes"] = Module["asm"]["D"]).apply(
       null,
       arguments,
     );
   });
 
   var _crypto_sign_messagebytes_max = (Module["_crypto_sign_messagebytes_max"] = function () {
-    return (_crypto_sign_messagebytes_max = Module["_crypto_sign_messagebytes_max"] = Module["asm"]["z"]).apply(
+    return (_crypto_sign_messagebytes_max = Module["_crypto_sign_messagebytes_max"] = Module["asm"]["E"]).apply(
       null,
       arguments,
     );
   });
 
   var _crypto_sign_seed_keypair = (Module["_crypto_sign_seed_keypair"] = function () {
-    return (_crypto_sign_seed_keypair = Module["_crypto_sign_seed_keypair"] = Module["asm"]["A"]).apply(
+    return (_crypto_sign_seed_keypair = Module["_crypto_sign_seed_keypair"] = Module["asm"]["F"]).apply(
       null,
       arguments,
     );
   });
 
   var _crypto_sign_keypair = (Module["_crypto_sign_keypair"] = function () {
-    return (_crypto_sign_keypair = Module["_crypto_sign_keypair"] = Module["asm"]["B"]).apply(null, arguments);
+    return (_crypto_sign_keypair = Module["_crypto_sign_keypair"] = Module["asm"]["G"]).apply(null, arguments);
   });
 
   var _crypto_sign = (Module["_crypto_sign"] = function () {
-    return (_crypto_sign = Module["_crypto_sign"] = Module["asm"]["C"]).apply(null, arguments);
+    return (_crypto_sign = Module["_crypto_sign"] = Module["asm"]["H"]).apply(null, arguments);
   });
 
   var _crypto_sign_open = (Module["_crypto_sign_open"] = function () {
-    return (_crypto_sign_open = Module["_crypto_sign_open"] = Module["asm"]["D"]).apply(null, arguments);
+    return (_crypto_sign_open = Module["_crypto_sign_open"] = Module["asm"]["I"]).apply(null, arguments);
   });
 
   var _crypto_sign_detached = (Module["_crypto_sign_detached"] = function () {
-    return (_crypto_sign_detached = Module["_crypto_sign_detached"] = Module["asm"]["E"]).apply(null, arguments);
+    return (_crypto_sign_detached = Module["_crypto_sign_detached"] = Module["asm"]["J"]).apply(null, arguments);
   });
 
   var _crypto_sign_verify_detached = (Module["_crypto_sign_verify_detached"] = function () {
-    return (_crypto_sign_verify_detached = Module["_crypto_sign_verify_detached"] = Module["asm"]["F"]).apply(
+    return (_crypto_sign_verify_detached = Module["_crypto_sign_verify_detached"] = Module["asm"]["K"]).apply(
       null,
       arguments,
     );
   });
 
   var _crypto_sign_init = (Module["_crypto_sign_init"] = function () {
-    return (_crypto_sign_init = Module["_crypto_sign_init"] = Module["asm"]["G"]).apply(null, arguments);
+    return (_crypto_sign_init = Module["_crypto_sign_init"] = Module["asm"]["L"]).apply(null, arguments);
   });
 
   var _crypto_sign_update = (Module["_crypto_sign_update"] = function () {
-    return (_crypto_sign_update = Module["_crypto_sign_update"] = Module["asm"]["H"]).apply(null, arguments);
+    return (_crypto_sign_update = Module["_crypto_sign_update"] = Module["asm"]["M"]).apply(null, arguments);
   });
 
   var _crypto_sign_final_create = (Module["_crypto_sign_final_create"] = function () {
-    return (_crypto_sign_final_create = Module["_crypto_sign_final_create"] = Module["asm"]["I"]).apply(
+    return (_crypto_sign_final_create = Module["_crypto_sign_final_create"] = Module["asm"]["N"]).apply(
       null,
       arguments,
     );
   });
 
   var _crypto_sign_final_verify = (Module["_crypto_sign_final_verify"] = function () {
-    return (_crypto_sign_final_verify = Module["_crypto_sign_final_verify"] = Module["asm"]["J"]).apply(
+    return (_crypto_sign_final_verify = Module["_crypto_sign_final_verify"] = Module["asm"]["O"]).apply(
       null,
       arguments,
     );
@@ -579,112 +608,112 @@ const libsodiumModule = function (Module = {}) {
 
   var _crypto_sign_ed25519_pk_to_curve25519 = (Module["_crypto_sign_ed25519_pk_to_curve25519"] = function () {
     return (_crypto_sign_ed25519_pk_to_curve25519 = Module["_crypto_sign_ed25519_pk_to_curve25519"] =
-      Module["asm"]["K"]).apply(null, arguments);
+      Module["asm"]["P"]).apply(null, arguments);
   });
 
   var _crypto_sign_ed25519_sk_to_curve25519 = (Module["_crypto_sign_ed25519_sk_to_curve25519"] = function () {
     return (_crypto_sign_ed25519_sk_to_curve25519 = Module["_crypto_sign_ed25519_sk_to_curve25519"] =
-      Module["asm"]["L"]).apply(null, arguments);
+      Module["asm"]["Q"]).apply(null, arguments);
   });
 
   var _randombytes_random = (Module["_randombytes_random"] = function () {
-    return (_randombytes_random = Module["_randombytes_random"] = Module["asm"]["M"]).apply(null, arguments);
+    return (_randombytes_random = Module["_randombytes_random"] = Module["asm"]["R"]).apply(null, arguments);
   });
 
   var _randombytes_stir = (Module["_randombytes_stir"] = function () {
-    return (_randombytes_stir = Module["_randombytes_stir"] = Module["asm"]["N"]).apply(null, arguments);
+    return (_randombytes_stir = Module["_randombytes_stir"] = Module["asm"]["S"]).apply(null, arguments);
   });
 
   var _randombytes_uniform = (Module["_randombytes_uniform"] = function () {
-    return (_randombytes_uniform = Module["_randombytes_uniform"] = Module["asm"]["O"]).apply(null, arguments);
+    return (_randombytes_uniform = Module["_randombytes_uniform"] = Module["asm"]["T"]).apply(null, arguments);
   });
 
   var _randombytes_buf = (Module["_randombytes_buf"] = function () {
-    return (_randombytes_buf = Module["_randombytes_buf"] = Module["asm"]["P"]).apply(null, arguments);
+    return (_randombytes_buf = Module["_randombytes_buf"] = Module["asm"]["U"]).apply(null, arguments);
   });
 
   var _randombytes_buf_deterministic = (Module["_randombytes_buf_deterministic"] = function () {
-    return (_randombytes_buf_deterministic = Module["_randombytes_buf_deterministic"] = Module["asm"]["Q"]).apply(
+    return (_randombytes_buf_deterministic = Module["_randombytes_buf_deterministic"] = Module["asm"]["V"]).apply(
       null,
       arguments,
     );
   });
 
   var _randombytes_seedbytes = (Module["_randombytes_seedbytes"] = function () {
-    return (_randombytes_seedbytes = Module["_randombytes_seedbytes"] = Module["asm"]["R"]).apply(null, arguments);
+    return (_randombytes_seedbytes = Module["_randombytes_seedbytes"] = Module["asm"]["W"]).apply(null, arguments);
   });
 
   var _randombytes_close = (Module["_randombytes_close"] = function () {
-    return (_randombytes_close = Module["_randombytes_close"] = Module["asm"]["S"]).apply(null, arguments);
+    return (_randombytes_close = Module["_randombytes_close"] = Module["asm"]["X"]).apply(null, arguments);
   });
 
   var _randombytes = (Module["_randombytes"] = function () {
-    return (_randombytes = Module["_randombytes"] = Module["asm"]["T"]).apply(null, arguments);
+    return (_randombytes = Module["_randombytes"] = Module["asm"]["Y"]).apply(null, arguments);
   });
 
   var _sodium_bin2hex = (Module["_sodium_bin2hex"] = function () {
-    return (_sodium_bin2hex = Module["_sodium_bin2hex"] = Module["asm"]["U"]).apply(null, arguments);
+    return (_sodium_bin2hex = Module["_sodium_bin2hex"] = Module["asm"]["Z"]).apply(null, arguments);
   });
 
   var _sodium_hex2bin = (Module["_sodium_hex2bin"] = function () {
-    return (_sodium_hex2bin = Module["_sodium_hex2bin"] = Module["asm"]["V"]).apply(null, arguments);
+    return (_sodium_hex2bin = Module["_sodium_hex2bin"] = Module["asm"]["_"]).apply(null, arguments);
   });
 
   var _sodium_base64_encoded_len = (Module["_sodium_base64_encoded_len"] = function () {
-    return (_sodium_base64_encoded_len = Module["_sodium_base64_encoded_len"] = Module["asm"]["W"]).apply(
+    return (_sodium_base64_encoded_len = Module["_sodium_base64_encoded_len"] = Module["asm"]["$"]).apply(
       null,
       arguments,
     );
   });
 
   var _sodium_bin2base64 = (Module["_sodium_bin2base64"] = function () {
-    return (_sodium_bin2base64 = Module["_sodium_bin2base64"] = Module["asm"]["X"]).apply(null, arguments);
+    return (_sodium_bin2base64 = Module["_sodium_bin2base64"] = Module["asm"]["aa"]).apply(null, arguments);
   });
 
   var _sodium_base642bin = (Module["_sodium_base642bin"] = function () {
-    return (_sodium_base642bin = Module["_sodium_base642bin"] = Module["asm"]["Y"]).apply(null, arguments);
+    return (_sodium_base642bin = Module["_sodium_base642bin"] = Module["asm"]["ba"]).apply(null, arguments);
   });
 
   var _sodium_init = (Module["_sodium_init"] = function () {
-    return (_sodium_init = Module["_sodium_init"] = Module["asm"]["Z"]).apply(null, arguments);
+    return (_sodium_init = Module["_sodium_init"] = Module["asm"]["ca"]).apply(null, arguments);
   });
 
   var _sodium_pad = (Module["_sodium_pad"] = function () {
-    return (_sodium_pad = Module["_sodium_pad"] = Module["asm"]["_"]).apply(null, arguments);
+    return (_sodium_pad = Module["_sodium_pad"] = Module["asm"]["da"]).apply(null, arguments);
   });
 
   var _sodium_unpad = (Module["_sodium_unpad"] = function () {
-    return (_sodium_unpad = Module["_sodium_unpad"] = Module["asm"]["$"]).apply(null, arguments);
+    return (_sodium_unpad = Module["_sodium_unpad"] = Module["asm"]["ea"]).apply(null, arguments);
   });
 
   var _sodium_version_string = (Module["_sodium_version_string"] = function () {
-    return (_sodium_version_string = Module["_sodium_version_string"] = Module["asm"]["aa"]).apply(null, arguments);
+    return (_sodium_version_string = Module["_sodium_version_string"] = Module["asm"]["fa"]).apply(null, arguments);
   });
 
   var _sodium_library_version_major = (Module["_sodium_library_version_major"] = function () {
-    return (_sodium_library_version_major = Module["_sodium_library_version_major"] = Module["asm"]["ba"]).apply(
+    return (_sodium_library_version_major = Module["_sodium_library_version_major"] = Module["asm"]["ga"]).apply(
       null,
       arguments,
     );
   });
 
   var _sodium_library_version_minor = (Module["_sodium_library_version_minor"] = function () {
-    return (_sodium_library_version_minor = Module["_sodium_library_version_minor"] = Module["asm"]["ca"]).apply(
+    return (_sodium_library_version_minor = Module["_sodium_library_version_minor"] = Module["asm"]["ha"]).apply(
       null,
       arguments,
     );
   });
 
   var _sodium_library_minimal = (Module["_sodium_library_minimal"] = function () {
-    return (_sodium_library_minimal = Module["_sodium_library_minimal"] = Module["asm"]["da"]).apply(null, arguments);
+    return (_sodium_library_minimal = Module["_sodium_library_minimal"] = Module["asm"]["ia"]).apply(null, arguments);
   });
 
   var _malloc = (Module["_malloc"] = function () {
-    return (_malloc = Module["_malloc"] = Module["asm"]["ea"]).apply(null, arguments);
+    return (_malloc = Module["_malloc"] = Module["asm"]["ja"]).apply(null, arguments);
   });
 
   var _free = (Module["_free"] = function () {
-    return (_free = Module["_free"] = Module["asm"]["fa"]).apply(null, arguments);
+    return (_free = Module["_free"] = Module["asm"]["ka"]).apply(null, arguments);
   });
 
   Module["setValue"] = setValue;

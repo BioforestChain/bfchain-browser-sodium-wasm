@@ -8,6 +8,7 @@ const output_format = "uint8array";
 let _installRes: Promise<InstallOptions | void> | undefined;
 export type InstallOptions = {
   instantiateWasm?: InstantiateWasm;
+  wasmUrl?: string;
   getRandomValue?: () => number;
 };
 export const install = (options?: InstallOptions) => {
@@ -16,6 +17,7 @@ export const install = (options?: InstallOptions) => {
 const _install = async (options?: InstallOptions) => {
   if (options) {
     libsodium.instantiateWasm = options.instantiateWasm;
+    libsodium.wasmUrl = options.wasmUrl;
     options.getRandomValue && (libsodium.getRandomValue = options.getRandomValue);
   }
   libsodiumInstaller(libsodium);

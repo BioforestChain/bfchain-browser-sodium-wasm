@@ -8,6 +8,7 @@ const output_format = "uint8array";
 let _installRes: Promise<InstallOptions | void> | undefined;
 export type InstallOptions = {
   instantiateWasm?: InstantiateWasm;
+  wasmUrl?: string;
   getRandomValue?: () => number;
 };
 export const install = (options?: InstallOptions) => {
@@ -16,6 +17,7 @@ export const install = (options?: InstallOptions) => {
 const _install = async (options?: InstallOptions) => {
   if (options) {
     libsodium.instantiateWasm = options.instantiateWasm;
+    libsodium.wasmUrl = options.wasmUrl;
     options.getRandomValue && (libsodium.getRandomValue = options.getRandomValue);
   }
   libsodiumInstaller(libsodium);
@@ -65,6 +67,10 @@ function symbols() {
     // "output_formats",
     "crypto_box_easy",
     "crypto_box_open_easy",
+    "crypto_hash_sha256",
+    "crypto_hash_sha256_final",
+    "crypto_hash_sha256_init",
+    "crypto_hash_sha256_update",
     "crypto_secretbox_easy",
     "crypto_secretbox_open_easy",
     "crypto_sign",
@@ -93,6 +99,7 @@ function symbols() {
     "crypto_box_NONCEBYTES",
     "crypto_box_PUBLICKEYBYTES",
     "crypto_box_SECRETKEYBYTES",
+    "crypto_hash_sha256_BYTES",
     "crypto_scalarmult_SCALARBYTES",
     "crypto_secretbox_KEYBYTES",
     "crypto_secretbox_MACBYTES",
@@ -539,6 +546,11 @@ export const CONSTANTS = {
     _cacheDefineConstantsProp("crypto_box_SECRETKEYBYTES", constantsValue);
     return constantsValue;
   },
+  get crypto_hash_sha256_BYTES() {
+    const constantsValue = libsodium._crypto_hash_sha256_bytes();
+    _cacheDefineConstantsProp("crypto_hash_sha256_BYTES", constantsValue);
+    return constantsValue;
+  },
   get crypto_scalarmult_SCALARBYTES() {
     const constantsValue = libsodium._crypto_scalarmult_scalarbytes();
     _cacheDefineConstantsProp("crypto_scalarmult_SCALARBYTES", constantsValue);
@@ -744,6 +756,108 @@ export const crypto_box_open_easy = <T extends FormatReturnNames = "uint8array">
     return ret;
   }
   _free_and_throw_error(address_pool, "incorrect key pair for the given ciphertext");
+};
+
+export const crypto_hash_sha256 = <T extends FormatReturnNames = "uint8array">(
+  message: Uint8Array,
+  outputFormat: T = "uint8array" as T,
+) => {
+  const address_pool = new AddressPool();
+
+  _check_output_format(outputFormat);
+  // ---------- input: message (unsized_buf)
+
+  message = _any_to_Uint8Array(address_pool, message, "message");
+  var message_address = _to_allocated_buf_address(message),
+    message_length = message.length;
+  address_pool.push(message_address);
+
+  // ---------- output hash (buf)
+
+  var hash_length = libsodium._crypto_hash_sha256_bytes() | 0,
+    hash = new AllocatedBuf(hash_length),
+    hash_address = hash.address;
+
+  address_pool.push(hash_address);
+
+  if ((libsodium._crypto_hash_sha256(hash_address, message_address, message_length, 0) | 0) === 0) {
+    var ret = _format_output(hash, outputFormat);
+    _free_all(address_pool);
+    return ret;
+  }
+  _free_and_throw_error(address_pool, "invalid usage");
+};
+
+export const crypto_hash_sha256_final = <T extends FormatReturnNames = "uint8array">(
+  state_address: number,
+  outputFormat: T = "uint8array" as T,
+) => {
+  const address_pool = new AddressPool();
+
+  _check_output_format(outputFormat);
+  // ---------- input: state_address (hash_sha256_state_address)
+
+  _require_defined(address_pool, state_address, "state_address");
+
+  // ---------- output hash (buf)
+
+  var hash_length = libsodium._crypto_hash_sha256_bytes() | 0,
+    hash = new AllocatedBuf(hash_length),
+    hash_address = hash.address;
+
+  address_pool.push(hash_address);
+
+  if ((libsodium._crypto_hash_sha256_final(state_address, hash_address) | 0) === 0) {
+    var ret = (libsodium._free(state_address), _format_output(hash, outputFormat));
+    _free_all(address_pool);
+    return ret;
+  }
+  _free_and_throw_error(address_pool, "invalid usage");
+};
+
+export const crypto_hash_sha256_init = <T extends FormatReturnNames = "uint8array">(
+  outputFormat: T = "uint8array" as T,
+) => {
+  const address_pool = new AddressPool();
+
+  _check_output_format(outputFormat);
+  // ---------- output state (hash_sha256_state)
+
+  var state_address = new AllocatedBuf(104).address;
+
+  if ((libsodium._crypto_hash_sha256_init(state_address) | 0) === 0) {
+    var ret = state_address;
+    _free_all(address_pool);
+    return ret;
+  }
+  _free_and_throw_error(address_pool, "invalid usage");
+};
+
+export const crypto_hash_sha256_update = <T extends FormatReturnNames = "uint8array">(
+  state_address: number,
+  message_chunk: Uint8Array,
+  outputFormat: T = "uint8array" as T,
+) => {
+  const address_pool = new AddressPool();
+
+  _check_output_format(outputFormat);
+  // ---------- input: state_address (hash_sha256_state_address)
+
+  _require_defined(address_pool, state_address, "state_address");
+
+  // ---------- input: message_chunk (unsized_buf)
+
+  message_chunk = _any_to_Uint8Array(address_pool, message_chunk, "message_chunk");
+  var message_chunk_address = _to_allocated_buf_address(message_chunk),
+    message_chunk_length = message_chunk.length;
+  address_pool.push(message_chunk_address);
+
+  if (
+    !((libsodium._crypto_hash_sha256_update(state_address, message_chunk_address, message_chunk_length, 0) | 0) === 0)
+  ) {
+    _free_and_throw_error(address_pool, "invalid usage");
+  }
+  _free_all(address_pool);
 };
 
 export const crypto_secretbox_easy = <T extends FormatReturnNames = "uint8array">(

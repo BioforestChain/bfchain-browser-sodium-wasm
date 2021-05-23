@@ -56,6 +56,46 @@ __Outputs:__
 * `plaintext`: Buf (size: undefined)
 
 
+## crypto_hash_sha256
+Function
+
+__Parameters:__
+* `message`: Unsized buf
+
+__Outputs:__
+* `hash`: Buf (size: undefined)
+
+
+## crypto_hash_sha256_final
+Function
+
+__Parameters:__
+* `state_address`: Sha256 state address
+
+__Outputs:__
+* `hash`: Buf (size: undefined)
+
+
+## crypto_hash_sha256_init
+Function
+
+__Parameters:__
+
+__Outputs:__
+* `state`: Sha256 state
+
+
+## crypto_hash_sha256_update
+Function
+
+__Parameters:__
+* `state_address`: Sha256 state address
+* `message_chunk`: Unsized buf
+
+__Outputs:__
+Boolean. True if method executed with success; false otherwise
+
+
 ## crypto_secretbox_easy
 Function
 

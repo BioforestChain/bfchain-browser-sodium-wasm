@@ -22,6 +22,20 @@ export interface WasmModule {
     publicKey_address: Prt,
     privateKey_address: Prt,
   ) => number;
+  _crypto_hash_sha256: (
+    hash_address: Prt,
+    message_address: Prt,
+    message_llength_height: number,
+    message_llength_low: number,
+  ) => number;
+  _crypto_hash_sha256_final: (state_address: Prt, hash_address: Prt) => number;
+  _crypto_hash_sha256_init: (state_address: Prt) => number;
+  _crypto_hash_sha256_update: (
+    state_address: Prt,
+    message_chunk_address: Prt,
+    message_chunk_llength_height: number,
+    message_chunk_llength_low: number,
+  ) => number;
   _crypto_secretbox_easy: (
     cipher_address: Prt,
     message_address: Prt,
@@ -100,6 +114,7 @@ export interface WasmModule {
   _crypto_box_noncebytes: () => number;
   _crypto_box_publickeybytes: () => number;
   _crypto_box_secretkeybytes: () => number;
+  _crypto_hash_sha256_bytes: () => number;
   _crypto_scalarmult_scalarbytes: () => number;
   _crypto_secretbox_keybytes: () => number;
   _crypto_secretbox_macbytes: () => number;
@@ -154,6 +169,7 @@ export interface LibsodiumModule extends WasmModule {
   _sodium_init(): number;
   /**custom inject functions */
   instantiateWasm?: InstantiateWasm;
+  wasmUrl?: string;
   getRandomValue: () => number;
 
   HEAPU8: Uint8Array;
