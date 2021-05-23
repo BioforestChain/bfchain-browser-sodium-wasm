@@ -12,7 +12,8 @@ mkdir -p build/wasm
 cp tmp/sodium.wasm build/wasm/sodium.wasm
 
 tsc --build tsconfig.json
-parcel build src/index.ts
+rollup -c
+# parcel build --no-optimize src/index.ts
 
 # node_modules/.bin/google-closure-compiler -O=ADVANCED --language_out=ECMASCRIPT_2019 --warning_level=QUIET --js=build/iife/index.js --js_output_file=build/iife/index.min.js
 # node_modules/.bin/google-closure-compiler -O=ADVANCED --language_out=ECMASCRIPT_2019 --warning_level=QUIET --js=build/cjs/index.js --js_output_file=build/cjs/index.min.js

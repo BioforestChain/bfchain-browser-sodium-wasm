@@ -242,7 +242,6 @@ function applyMacro(macroCode, symbols, substitutes) {
 }
 
 function finalizeWrapper() {
-  console
   scriptBuf = applyMacro(
     scriptBuf, ["/*{{wraps_here}}*/", "/*{{exports_here}}*/", "/*{{libsodium}}*/"], [injectTabs(functionsCode, 2), injectTabs(exportsCode, 3), libsodiumModuleName]
   );
