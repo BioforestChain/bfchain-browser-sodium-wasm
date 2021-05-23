@@ -1,6 +1,6 @@
 {
   "name": "@bfchain/browser-sodium-wasm",
-  "version": "0.0.3-dev",
+  "version": "0.1.0",
   "description": "",
   "main": "build/cjs/index.js",
   "module": "build/esm/index.js",

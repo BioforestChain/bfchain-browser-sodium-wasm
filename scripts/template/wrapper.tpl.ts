@@ -5,13 +5,18 @@ export const libsodium = {} as LibsodiumModule;
 
 const output_format = "uint8array";
 
-let _installRes: Promise<void> | undefined;
-export const install = () => {
-  return _installRes || (_installRes = _install());
+let _installRes: Promise<InstallOptions | void> | undefined;
+export type InstallOptions = {
+  instantiateWasm?: InstantiateWasm;
+  getRandomValue?: () => number;
 };
-const _install = async (options?: { instantiateWasm?: InstantiateWasm }) => {
+export const install = (options?: InstallOptions) => {
+  return _installRes || (_installRes = _install(options));
+};
+const _install = async (options?: InstallOptions) => {
   if (options) {
     libsodium.instantiateWasm = options.instantiateWasm;
+    options.getRandomValue && (libsodium.getRandomValue = options.getRandomValue);
   }
   libsodiumInstaller(libsodium);
 
@@ -28,7 +33,7 @@ const _install = async (options?: { instantiateWasm?: InstantiateWasm }) => {
     const decrypted = crypto_secretbox_open_easy(encrypted, nonce, key);
 
     if (memcmp(message, decrypted)) {
-      return;
+      return options;
     }
   } catch (err) {
     console.log(err);

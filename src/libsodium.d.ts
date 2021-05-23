@@ -109,24 +109,7 @@ export interface WasmModule {
   _crypto_sign_publickeybytes: () => number;
   _crypto_sign_secretkeybytes: () => number;
   _crypto_sign_seedbytes: () => number;
-}
-export type InstantiateWasm = (
-  imports: WebAssembly.Imports,
-  receiveInstance: (instance: WebAssembly.Instance) => WebAssembly.Instance["exports"],
-) => WasmModule | Promise<WasmModule>;
 
-export interface LibsodiumModule extends WasmModule {
-  ready: Promise<void>;
-  _sodium_init(): number;
-  /**custom inject functions */
-  instantiateWasm?: InstantiateWasm;
-
-  HEAPU8: Uint8Array;
-  HEAP8: Int8Array;
-  HEAP16: Int16Array;
-  HEAP32: Int32Array;
-  HEAPF32: Float32Array;
-  HEAPF64: Float64Array;
   _malloc: (length: number) => number;
   _free: (address: number) => void;
 
@@ -160,6 +143,25 @@ export interface LibsodiumModule extends WasmModule {
     hex_end: Prt,
   ) => number;
   _randombytes_seedbytes: () => number;
+}
+export type InstantiateWasm = (
+  imports: WebAssembly.Imports,
+  receiveInstance: (instance: WebAssembly.Instance) => WasmModule, //WebAssembly.Instance["exports"],
+) => WasmModule | Promise<WasmModule>;
+
+export interface LibsodiumModule extends WasmModule {
+  ready: Promise<void>;
+  _sodium_init(): number;
+  /**custom inject functions */
+  instantiateWasm?: InstantiateWasm;
+  getRandomValue: () => number;
+
+  HEAPU8: Uint8Array;
+  HEAP8: Int8Array;
+  HEAP16: Int16Array;
+  HEAP32: Int32Array;
+  HEAPF32: Float32Array;
+  HEAPF64: Float64Array;
 
   getValue: (ptr: Prt, type: ValueType) => number;
   setValue: (ptr: Prt, value: number, type: ValueType) => void;
